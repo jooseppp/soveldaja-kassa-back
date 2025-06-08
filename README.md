@@ -5,7 +5,7 @@
 
 ## Running with Docker
 ```bash
-docker-compose up -d
+docker-compose up -d --build
 ```
 
 ## Services
