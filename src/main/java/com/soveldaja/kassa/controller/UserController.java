@@ -2,11 +2,18 @@ package com.soveldaja.kassa.controller;
 
 import com.soveldaja.kassa.dto.UserDTO;
 import com.soveldaja.kassa.service.UserService;
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 import java.util.Map;
@@ -17,22 +24,19 @@ import java.util.Map;
 public class UserController {
     private final UserService userService;
 
+
     @GetMapping
-    public ResponseEntity<List<UserDTO>> getAllUsers(HttpServletRequest request) {
-        // Check if user is admin
-        String userRole = (String) request.getAttribute("userRole");
-        if (!"admin".equals(userRole)) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
-        }
-        
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<List<UserDTO>> getAllUsers() {
         List<UserDTO> users = userService.getAllUsers();
         // Remove passwords from response
         users.forEach(user -> user.setPassword(null));
         return ResponseEntity.ok(users);
     }
 
+
     @GetMapping("/{id}")
-    public ResponseEntity<?> getUserById(@PathVariable String id, HttpServletRequest request) {
+    public ResponseEntity<?> getUserById(@PathVariable String id) {
         try {
             UserDTO user = userService.getUserById(Long.parseLong(id));
             // Remove password from response
@@ -44,14 +48,10 @@ public class UserController {
         }
     }
 
+
     @PostMapping
-    public ResponseEntity<?> createUser(@RequestBody UserDTO userDTO, HttpServletRequest request) {
-        // Check if user is admin
-        String userRole = (String) request.getAttribute("userRole");
-        if (!"admin".equals(userRole)) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
-        }
-        
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<?> createUser(@RequestBody UserDTO userDTO) {
         try {
             UserDTO createdUser = userService.createUser(userDTO);
             // Remove password from response
@@ -63,14 +63,10 @@ public class UserController {
         }
     }
 
+
     @PutMapping("/{id}")
-    public ResponseEntity<?> updateUser(@PathVariable String id, @RequestBody UserDTO userDTO, HttpServletRequest request) {
-        // Check if user is admin
-        String userRole = (String) request.getAttribute("userRole");
-        if (!"admin".equals(userRole)) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
-        }
-        
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<?> updateUser(@PathVariable String id, @RequestBody UserDTO userDTO) {
         try {
             UserDTO updatedUser = userService.updateUser(Long.parseLong(id), userDTO);
             // Remove password from response
@@ -82,14 +78,10 @@ public class UserController {
         }
     }
 
+
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteUser(@PathVariable String id, HttpServletRequest request) {
-        // Check if user is admin
-        String userRole = (String) request.getAttribute("userRole");
-        if (!"admin".equals(userRole)) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
-        }
-        
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<?> deleteUser(@PathVariable String id) {
         try {
             userService.deleteUser(Long.parseLong(id));
             return ResponseEntity.status(HttpStatus.NO_CONTENT).build();

@@ -2,11 +2,19 @@ package com.soveldaja.kassa.controller;
 
 import com.soveldaja.kassa.dto.ProductDTO;
 import com.soveldaja.kassa.service.ProductService;
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 import java.util.Map;
@@ -18,25 +26,26 @@ import java.util.stream.Collectors;
 public class ProductController {
     private final ProductService productService;
 
+
     @GetMapping
     public ResponseEntity<List<ProductDTO>> getAllProducts(
-            @RequestParam(required = false) String category,
-            HttpServletRequest request) {
-        
+            @RequestParam(required = false) String category) {
+
         List<ProductDTO> products = productService.getAllProducts();
-        
+
         // Filter by category if provided
         if (category != null && !category.isEmpty()) {
             products = products.stream()
                     .filter(product -> category.equals(product.getCategory()))
                     .collect(Collectors.toList());
         }
-        
+
         return ResponseEntity.ok(products);
     }
 
+
     @GetMapping("/{id}")
-    public ResponseEntity<?> getProductById(@PathVariable String id, HttpServletRequest request) {
+    public ResponseEntity<?> getProductById(@PathVariable String id) {
         try {
             ProductDTO product = productService.getProductById(Long.parseLong(id));
             return ResponseEntity.ok(product);
@@ -46,14 +55,10 @@ public class ProductController {
         }
     }
 
+
     @PostMapping
-    public ResponseEntity<?> createProduct(@RequestBody ProductDTO productDTO, HttpServletRequest request) {
-        // Check if user is admin
-        String userRole = (String) request.getAttribute("userRole");
-        if (!"admin".equals(userRole)) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
-        }
-        
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<?> createProduct(@RequestBody ProductDTO productDTO) {
         try {
             ProductDTO createdProduct = productService.createProduct(productDTO);
             return ResponseEntity.status(HttpStatus.CREATED).body(createdProduct);
@@ -63,18 +68,13 @@ public class ProductController {
         }
     }
 
+
     @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> updateProduct(
             @PathVariable String id,
-            @RequestBody ProductDTO productDTO,
-            HttpServletRequest request) {
-        
-        // Check if user is admin
-        String userRole = (String) request.getAttribute("userRole");
-        if (!"admin".equals(userRole)) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
-        }
-        
+            @RequestBody ProductDTO productDTO) {
+
         try {
             ProductDTO updatedProduct = productService.updateProduct(Long.parseLong(id), productDTO);
             return ResponseEntity.ok(updatedProduct);
@@ -84,14 +84,10 @@ public class ProductController {
         }
     }
 
+
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteProduct(@PathVariable String id, HttpServletRequest request) {
-        // Check if user is admin
-        String userRole = (String) request.getAttribute("userRole");
-        if (!"admin".equals(userRole)) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
-        }
-        
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<?> deleteProduct(@PathVariable String id) {
         try {
             productService.deleteProduct(Long.parseLong(id));
             return ResponseEntity.status(HttpStatus.NO_CONTENT).build();

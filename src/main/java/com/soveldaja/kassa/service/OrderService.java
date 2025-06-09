@@ -69,7 +69,6 @@ public class OrderService {
         Order order = new Order();
         order.setCustomer(customer);
         order.setTotal(orderDTO.getTotal());
-        order.setOrderTime(LocalDateTime.now());
         order.setCreatedBy(orderDTO.getCreatedBy());
         order.setStatus(orderDTO.getStatus());
         order.setDescription(orderDTO.getDescription());

@@ -6,7 +6,16 @@ import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 import java.util.Map;
@@ -16,6 +25,7 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class OrderController {
     private final OrderService orderService;
+
 
     @GetMapping
     public ResponseEntity<List<OrderDTO>> getAllOrders(
@@ -27,6 +37,7 @@ public class OrderController {
         return ResponseEntity.ok(orders);
     }
 
+
     @GetMapping("/{id}")
     public ResponseEntity<?> getOrderById(@PathVariable String id, HttpServletRequest request) {
         try {
@@ -37,6 +48,7 @@ public class OrderController {
                     .body(Map.of("error", "Order not found"));
         }
     }
+
 
     @PostMapping
     public ResponseEntity<?> createOrder(@RequestBody OrderDTO orderDTO, HttpServletRequest request) {
@@ -52,6 +64,7 @@ public class OrderController {
                     .body(Map.of("error", e.getMessage()));
         }
     }
+
 
     @PutMapping("/{id}/status")
     public ResponseEntity<?> updateOrderStatus(
@@ -77,14 +90,10 @@ public class OrderController {
         }
     }
 
+
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteOrder(@PathVariable String id, HttpServletRequest request) {
-        // Check if user is admin
-        String userRole = (String) request.getAttribute("userRole");
-        if (!"admin".equals(userRole)) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
-        }
-
         try {
             orderService.deleteOrder(Long.parseLong(id));
             return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
