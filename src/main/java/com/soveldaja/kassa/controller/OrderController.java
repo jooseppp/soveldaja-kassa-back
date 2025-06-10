@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -30,8 +29,7 @@ public class OrderController {
     @GetMapping
     public ResponseEntity<List<OrderDTO>> getAllOrders(
             @RequestParam(required = false) String status,
-            @RequestParam(required = false) String customerId,
-            HttpServletRequest request) {
+            @RequestParam(required = false) String customerId) {
 
         List<OrderDTO> orders = orderService.getAllOrders(status, customerId);
         return ResponseEntity.ok(orders);
@@ -39,7 +37,7 @@ public class OrderController {
 
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> getOrderById(@PathVariable String id, HttpServletRequest request) {
+    public ResponseEntity<?> getOrderById(@PathVariable String id) {
         try {
             OrderDTO order = orderService.getOrderById(Long.parseLong(id));
             return ResponseEntity.ok(order);
@@ -53,7 +51,6 @@ public class OrderController {
     @PostMapping
     public ResponseEntity<?> createOrder(@RequestBody OrderDTO orderDTO, HttpServletRequest request) {
         try {
-            // Set the creator of the order
             String username = (String) request.getAttribute("username");
             orderDTO.setCreatedBy(username);
 
@@ -66,34 +63,9 @@ public class OrderController {
     }
 
 
-    @PutMapping("/{id}/status")
-    public ResponseEntity<?> updateOrderStatus(
-            @PathVariable String id,
-            @RequestBody Map<String, String> statusUpdate,
-            HttpServletRequest request) {
-
-        String status = statusUpdate.get("status");
-        if (status == null || status.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(Map.of("error", "Status is required"));
-        }
-
-        try {
-            OrderDTO updatedOrder = orderService.updateOrderStatus(Long.parseLong(id), status);
-            return ResponseEntity.ok(Map.of(
-                    "id", updatedOrder.getId(),
-                    "status", updatedOrder.getStatus()
-            ));
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(Map.of("error", "Order not found"));
-        }
-    }
-
-
     @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteOrder(@PathVariable String id, HttpServletRequest request) {
+    public ResponseEntity<?> deleteOrder(@PathVariable String id) {
         try {
             orderService.deleteOrder(Long.parseLong(id));
             return ResponseEntity.status(HttpStatus.NO_CONTENT).build();

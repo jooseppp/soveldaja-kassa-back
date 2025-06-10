@@ -9,7 +9,6 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -40,7 +39,7 @@ public class CustomerController {
                             schema = @Schema(implementation = CustomerDTO.class)))
     })
     @GetMapping
-    public ResponseEntity<List<CustomerDTO>> getAllCustomers(HttpServletRequest request) {
+    public ResponseEntity<List<CustomerDTO>> getAllCustomers() {
         List<CustomerDTO> customers = customerService.getAllCustomers();
         return ResponseEntity.ok(customers);
     }
@@ -56,8 +55,7 @@ public class CustomerController {
     })
     @GetMapping("/{id}")
     public ResponseEntity<?> getCustomerById(
-            @Parameter(description = "ID of the customer to be retrieved") @PathVariable String id,
-            HttpServletRequest request) {
+            @Parameter(description = "ID of the customer to be retrieved") @PathVariable String id) {
         try {
             CustomerDTO customer = customerService.getCustomerById(Long.parseLong(id));
             return ResponseEntity.ok(customer);
@@ -79,8 +77,7 @@ public class CustomerController {
     @PostMapping
     public ResponseEntity<?> createCustomer(
             @Parameter(description = "Customer data to create", required = true)
-            @RequestBody CustomerDTO customerDTO,
-            HttpServletRequest request) {
+            @RequestBody CustomerDTO customerDTO) {
         try {
             CustomerDTO createdCustomer = customerService.createCustomer(customerDTO);
             return ResponseEntity.status(HttpStatus.CREATED).body(createdCustomer);
@@ -102,8 +99,7 @@ public class CustomerController {
     @PutMapping("/{id}")
     public ResponseEntity<?> updateCustomer(
             @Parameter(description = "ID of the customer to be updated") @PathVariable String id,
-            @Parameter(description = "Updated customer data", required = true) @RequestBody CustomerDTO customerDTO,
-            HttpServletRequest request) {
+            @Parameter(description = "Updated customer data", required = true) @RequestBody CustomerDTO customerDTO) {
 
         try {
             CustomerDTO updatedCustomer = customerService.updateCustomer(Long.parseLong(id), customerDTO);
@@ -123,8 +119,7 @@ public class CustomerController {
     })
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteCustomer(
-            @Parameter(description = "ID of the customer to be deleted") @PathVariable String id,
-            HttpServletRequest request) {
+            @Parameter(description = "ID of the customer to be deleted") @PathVariable String id) {
         try {
             customerService.deleteCustomer(Long.parseLong(id));
             return ResponseEntity.status(HttpStatus.NO_CONTENT).build();

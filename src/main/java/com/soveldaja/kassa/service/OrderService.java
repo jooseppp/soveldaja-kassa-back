@@ -12,8 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.math.BigDecimal;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -25,12 +23,14 @@ public class OrderService {
     private final OrderItemRepository orderItemRepository;
     private final CustomerRepository customerRepository;
 
+
     @Autowired
     public OrderService(OrderRepository orderRepository, OrderItemRepository orderItemRepository, CustomerRepository customerRepository) {
         this.orderRepository = orderRepository;
         this.orderItemRepository = orderItemRepository;
         this.customerRepository = customerRepository;
     }
+
 
     public List<OrderDTO> getAllOrders(String status, String customerId) {
         List<Order> orders = orderRepository.findAll();
@@ -45,7 +45,7 @@ public class OrderService {
         // Filter by customerId if provided
         if (customerId != null && !customerId.isEmpty()) {
             orders = orders.stream()
-                    .filter(order -> order.getCustomer() != null && 
+                    .filter(order -> order.getCustomer() != null &&
                             customerId.equals(order.getCustomer().getId().toString()))
                     .collect(Collectors.toList());
         }
@@ -55,11 +55,13 @@ public class OrderService {
                 .collect(Collectors.toList());
     }
 
+
     public OrderDTO getOrderById(Long id) {
         return orderRepository.findById(id)
                 .map(this::convertToDTO)
                 .orElseThrow(() -> new RuntimeException("Order not found with id: " + id));
     }
+
 
     @Transactional
     public OrderDTO createOrder(OrderDTO orderDTO) {
@@ -89,6 +91,7 @@ public class OrderService {
 
         return convertToDTO(savedOrder);
     }
+
 
     @Transactional
     public OrderDTO updateOrder(Long id, OrderDTO orderDTO) {
@@ -125,19 +128,11 @@ public class OrderService {
         return convertToDTO(updatedOrder);
     }
 
+
     public void deleteOrder(Long id) {
         orderRepository.deleteById(id);
     }
 
-    @Transactional
-    public OrderDTO updateOrderStatus(Long id, String status) {
-        Order order = orderRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Order not found with id: " + id));
-
-        order.setStatus(status);
-        Order updatedOrder = orderRepository.save(order);
-        return convertToDTO(updatedOrder);
-    }
 
     private OrderDTO convertToDTO(Order order) {
         List<OrderItemDTO> itemDTOs = order.getItems().stream()
