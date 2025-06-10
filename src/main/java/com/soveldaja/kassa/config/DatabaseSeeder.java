@@ -2,30 +2,30 @@ package com.soveldaja.kassa.config;
 
 import com.soveldaja.kassa.entity.User;
 import com.soveldaja.kassa.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.util.Optional;
 
 @Component
+@RequiredArgsConstructor
 public class DatabaseSeeder implements CommandLineRunner {
 
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
-    @Autowired
-    public DatabaseSeeder(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
 
     @Override
     public void run(String... args) throws Exception {
-        // Check and create admin user if not exists
+        // Check and create an admin user if not exists
         createUserIfNotExists("admin", "admin", "ADMIN");
 
-        // Check and create default user if not exists
+        // Check and create a default user if not exists
         createUserIfNotExists("user", "user", "USER");
     }
+
 
     private void createUserIfNotExists(String username, String password, String role) {
         Optional<User> existingUser = userRepository.findByUsername(username);
@@ -33,7 +33,7 @@ public class DatabaseSeeder implements CommandLineRunner {
         if (existingUser.isEmpty()) {
             User newUser = new User();
             newUser.setUsername(username);
-            newUser.setPassword(password);
+            newUser.setPassword(passwordEncoder.encode(password));
             newUser.setRole(role);
 
             userRepository.save(newUser);

@@ -16,19 +16,21 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     private final UserService userService;
 
+
     public CustomUserDetailsService(UserService userService) {
         this.userService = userService;
     }
+
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         try {
             UserDTO userDTO = userService.getUserByUsername(username);
-            
+
             return new User(
-                userDTO.getUsername(),
-                userDTO.getPassword(),
-                Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + userDTO.getRole().toUpperCase()))
+                    userDTO.getUsername(),
+                    userDTO.getPassword(),
+                    Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + userDTO.getRole().toUpperCase()))
             );
         } catch (Exception e) {
             throw new UsernameNotFoundException("User not found: " + username);
