@@ -25,15 +25,14 @@ public class DatabaseSeeder implements CommandLineRunner {
 
 
     private void createDrinks() {
-        DrinkDTO newDrink = new DrinkDTO();
-        newDrink.setName("New Fashioned");
-        newDrink.setPrice(BigDecimal.valueOf(10));
+        DrinkDTO drink1 = new DrinkDTO();
+        drink1.setName("New Fashioned");
+        drink1.setPrice(BigDecimal.valueOf(10));
 
-        DrinkDTO oldDrink = new DrinkDTO();
-        newDrink.setName("Old Fashioned");
-        newDrink.setPrice(BigDecimal.valueOf(15));
+        DrinkDTO drink2 = new DrinkDTO();
+        drink2.setName("Old Fashioned");
+        drink2.setPrice(BigDecimal.valueOf(15));
 
-        drinkService.saveDrinks(List.of(newDrink, oldDrink));
+        drinkService.saveDrinks(List.of(drink1, drink2));
     }
-
 }
