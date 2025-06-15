@@ -4,7 +4,6 @@ import com.soveldaja.kassa.dto.UserDTO;
 import com.soveldaja.kassa.entity.User;
 import com.soveldaja.kassa.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,7 +14,6 @@ import java.util.stream.Collectors;
 public class UserService {
 
     private final UserRepository userRepository;
-    private final BCryptPasswordEncoder passwordEncoder;
 
 
     public List<UserDTO> getAllUsers() {
@@ -42,7 +40,6 @@ public class UserService {
     public UserDTO createUser(UserDTO userDTO) {
         User user = new User();
         user.setUsername(userDTO.getUsername());
-        user.setPassword(passwordEncoder.encode(userDTO.getPassword()));
 
         User savedUser = userRepository.save(user);
         return convertToDTO(savedUser);
@@ -55,9 +52,9 @@ public class UserService {
 
         user.setUsername(userDTO.getUsername());
         // Only encode the password if it's been changed (not null or empty)
-        if (userDTO.getPassword() != null && !userDTO.getPassword().isEmpty()) {
+       /* if (userDTO.getPassword() != null && !userDTO.getPassword().isEmpty()) {
             user.setPassword(passwordEncoder.encode(userDTO.getPassword()));
-        }
+        }*/
 
         User updatedUser = userRepository.save(user);
         return convertToDTO(updatedUser);
