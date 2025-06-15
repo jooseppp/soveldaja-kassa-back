@@ -26,8 +26,8 @@ public class Product extends AuditableEntity {
     private String name;
 
     private BigDecimal price;
-    
+
     private String description;
-    
+
     private String category;
 }

@@ -13,7 +13,6 @@ import java.util.List;
 @AllArgsConstructor
 public class OrderDTO {
     private String id;
-    private String customerId;
     private List<OrderItemDTO> items;
     private BigDecimal total;
     private LocalDateTime createdAt;

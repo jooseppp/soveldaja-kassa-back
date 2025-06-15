@@ -27,6 +27,6 @@ public class OrderItem {
     private Order order;
 
     private String productId;
-    
+
     private Integer quantity;
 }
