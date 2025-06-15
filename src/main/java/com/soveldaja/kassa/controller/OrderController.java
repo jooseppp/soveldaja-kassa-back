@@ -2,7 +2,6 @@ package com.soveldaja.kassa.controller;
 
 import com.soveldaja.kassa.dto.OrderDTO;
 import com.soveldaja.kassa.service.OrderService;
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -48,10 +47,8 @@ public class OrderController {
 
 
     @PostMapping
-    public ResponseEntity<?> createOrder(@RequestBody OrderDTO orderDTO, HttpServletRequest request) {
+    public ResponseEntity<?> createOrder(@RequestBody OrderDTO orderDTO) {
         try {
-            String username = (String) request.getAttribute("username");
-
             OrderDTO createdOrder = orderService.createOrder(orderDTO);
             return ResponseEntity.status(HttpStatus.CREATED).body(createdOrder);
         } catch (Exception e) {
