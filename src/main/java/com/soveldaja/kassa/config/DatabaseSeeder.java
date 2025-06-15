@@ -1,13 +1,15 @@
 package com.soveldaja.kassa.config;
 
-import com.soveldaja.kassa.entity.User;
+import com.soveldaja.kassa.dto.DrinkDTO;
 import com.soveldaja.kassa.repository.UserRepository;
+import com.soveldaja.kassa.service.DrinkService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
-import java.util.Optional;
+import java.math.BigDecimal;
+import java.util.List;
 
 @Component
 @RequiredArgsConstructor
@@ -15,31 +17,25 @@ public class DatabaseSeeder implements CommandLineRunner {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final DrinkService drinkService;
 
 
     @Override
     public void run(String... args) throws Exception {
-        // Check and create an admin user if not exists
-        createUserIfNotExists("admin", "admin", "ADMIN");
-
-        // Check and create a default user if not exists
-        createUserIfNotExists("user", "user", "USER");
+        createDrinks();
     }
 
 
-    private void createUserIfNotExists(String username, String password, String role) {
-        Optional<User> existingUser = userRepository.findByUsername(username);
+    private void createDrinks() {
+        DrinkDTO newDrink = new DrinkDTO();
+        newDrink.setName("New Fashioned");
+        newDrink.setPrice(BigDecimal.valueOf(10));
 
-        if (existingUser.isEmpty()) {
-            User newUser = new User();
-            newUser.setUsername(username);
-            newUser.setPassword(passwordEncoder.encode(password));
-            newUser.setRole(role);
+        DrinkDTO oldDrink = new DrinkDTO();
+        newDrink.setName("Old Fashioned");
+        newDrink.setPrice(BigDecimal.valueOf(15));
 
-            userRepository.save(newUser);
-            System.out.println("Created " + role + " user: " + username);
-        } else {
-            System.out.println(role + " user already exists: " + username);
-        }
+        drinkService.saveDrinks(List.of(newDrink, oldDrink));
     }
+
 }

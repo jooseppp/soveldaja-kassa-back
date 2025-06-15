@@ -16,7 +16,4 @@ public class OrderDTO {
     private List<OrderItemDTO> items;
     private BigDecimal total;
     private LocalDateTime createdAt;
-    private String createdBy;
-    private String status;
-    private String description;
 }

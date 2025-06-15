@@ -5,7 +5,6 @@ import com.soveldaja.kassa.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -33,7 +32,6 @@ public class ProductController {
 
         List<ProductDTO> products = productService.getAllProducts();
 
-        // Filter by category if provided
         if (category != null && !category.isEmpty()) {
             products = products.stream()
                     .filter(product -> category.equals(product.getCategory()))
@@ -57,7 +55,6 @@ public class ProductController {
 
 
     @PostMapping
-    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> createProduct(@RequestBody ProductDTO productDTO) {
         try {
             ProductDTO createdProduct = productService.createProduct(productDTO);
@@ -70,7 +67,6 @@ public class ProductController {
 
 
     @PutMapping("/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> updateProduct(
             @PathVariable String id,
             @RequestBody ProductDTO productDTO) {
@@ -86,7 +82,6 @@ public class ProductController {
 
 
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> deleteProduct(@PathVariable String id) {
         try {
             productService.deleteProduct(Long.parseLong(id));

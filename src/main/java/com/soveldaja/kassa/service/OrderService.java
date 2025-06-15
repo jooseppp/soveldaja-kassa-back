@@ -25,12 +25,6 @@ public class OrderService {
     public List<OrderDTO> getAllOrders(String status, String customerId) {
         List<Order> orders = orderRepository.findAll();
 
-        if (status != null && !status.isEmpty()) {
-            orders = orders.stream()
-                    .filter(order -> status.equals(order.getStatus()))
-                    .toList();
-        }
-
         return orders.stream()
                 .map(this::convertToDTO)
                 .collect(Collectors.toList());
@@ -48,9 +42,6 @@ public class OrderService {
     public OrderDTO createOrder(OrderDTO orderDTO) {
         Order order = new Order();
         order.setTotal(orderDTO.getTotal());
-        order.setCreatedBy(orderDTO.getCreatedBy());
-        order.setStatus(orderDTO.getStatus());
-        order.setDescription(orderDTO.getDescription());
 
         Order savedOrder = orderRepository.save(order);
         createOrderItems(orderDTO, savedOrder);
@@ -79,10 +70,6 @@ public class OrderService {
         Order order = orderRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Order not found with id: " + id));
 
-        order.setTotal(orderDTO.getTotal());
-        order.setCreatedBy(orderDTO.getCreatedBy());
-        order.setStatus(orderDTO.getStatus());
-        order.setDescription(orderDTO.getDescription());
 
         // Remove existing items
         orderItemRepository.deleteAll(order.getItems());
@@ -110,10 +97,7 @@ public class OrderService {
                 order.getId().toString(),
                 itemDTOs,
                 order.getTotal(),
-                order.getCreatedAt(),
-                order.getCreatedBy(),
-                order.getStatus(),
-                order.getDescription()
+                order.getCreatedAt()
         );
     }
 }

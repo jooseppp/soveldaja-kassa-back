@@ -4,22 +4,16 @@ package com.soveldaja.kassa.service;
 import com.soveldaja.kassa.dto.DrinkDTO;
 import com.soveldaja.kassa.entity.Drink;
 import com.soveldaja.kassa.repository.DrinkRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class DrinkService {
-
-    private final com.soveldaja.kassa.repository.DrinkRepository drinkRepository;
-
-
-    @Autowired
-    public DrinkService(DrinkRepository drinkRepository) {
-        this.drinkRepository = drinkRepository;
-    }
+    private final DrinkRepository drinkRepository;
 
 
     public List<DrinkDTO> getAllDrinks() {
@@ -33,6 +27,16 @@ public class DrinkService {
         return drinkRepository.findById(id)
                 .map(this::convertToDTO)
                 .orElseThrow(() -> new RuntimeException("Drink not found with id: " + id));
+    }
+
+
+    public void saveDrinks(List<DrinkDTO> drinks) {
+        drinkRepository.saveAll(drinks.stream()
+                .map(drinkDto -> Drink.builder()
+                        .name(drinkDto.getName())
+                        .price(drinkDto.getPrice())
+                        .build())
+                .toList());
     }
 
 

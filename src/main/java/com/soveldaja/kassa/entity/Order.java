@@ -31,10 +31,4 @@ public class Order extends AuditableEntity {
     private List<OrderItem> items = new ArrayList<>();
 
     private BigDecimal total;
-
-    private String createdBy;
-
-    private String status;
-
-    private String description;
 }
