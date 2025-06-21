@@ -89,15 +89,16 @@ public class OrderService {
 
 
     private OrderDTO convertToDTO(Order order) {
-        List<OrderItemDTO> itemDTOs = order.getItems().stream()
-                .map(item -> new OrderItemDTO(item.getProductId(), item.getQuantity()))
-                .collect(Collectors.toList());
+        OrderDTO dto = new OrderDTO();
+        dto.setId(order.getId() != null ? order.getId().toString() : null);
+        dto.setTotal(order.getTotal());
 
-        return new OrderDTO(
-                order.getId().toString(),
-                itemDTOs,
-                order.getTotal(),
-                order.getCreatedAt()
-        );
+        List<OrderItemDTO> itemDTOs = order.getItems().stream()
+                .map(item -> new OrderItemDTO(
+                        item.getProductId() != null ? item.getProductId() : null,
+                        item.getQuantity()))
+                .toList();
+        dto.setItems(itemDTOs);
+        return dto;
     }
 }

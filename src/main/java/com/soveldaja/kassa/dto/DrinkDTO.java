@@ -11,12 +11,14 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 @AllArgsConstructor
 public class DrinkDTO {
-    private Long id;
+    private Long drinkId;
     private String name;
     private BigDecimal price;
+    private Long registerId;
 
 
     public static DrinkDTO toDto(Drink drink) {
-        return new DrinkDTO(drink.getId(), drink.getName(), drink.getPrice());
+        Long registerId = drink.getRegister() != null ? drink.getRegister().getId() : null;
+        return new DrinkDTO(drink.getId(), drink.getName(), drink.getPrice(), registerId);
     }
 }

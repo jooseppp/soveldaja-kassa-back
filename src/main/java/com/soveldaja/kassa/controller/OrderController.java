@@ -24,7 +24,7 @@ public class OrderController {
     private final OrderService orderService;
 
 
-    @GetMapping
+    @GetMapping("/getAll")
     public ResponseEntity<List<OrderDTO>> getAllOrders(
             @RequestParam(required = false) String status,
             @RequestParam(required = false) String customerId) {

@@ -21,21 +21,31 @@ public class DrinkController {
     private final DrinkService drinkService;
 
 
-    @GetMapping
-    public ResponseEntity<List<DrinkDTO>> getAllDrinks() {
+    @GetMapping("/{registerId}")
+    public ResponseEntity<List<DrinkDTO>> getAllDrinks(@PathVariable Long registerId) {
+        if (registerId != null) {
+            return ResponseEntity.ok(drinkService.getDrinksByRegisterId(registerId));
+        }
         return ResponseEntity.ok(drinkService.getAllDrinks());
     }
 
 
-    @GetMapping("/{id}")
+    @GetMapping("/drink/{id}")
     public ResponseEntity<DrinkDTO> getDrinkById(@PathVariable Long id) {
         return ResponseEntity.ok(drinkService.getDrinkById(id));
     }
 
 
-    @PostMapping
+    @PostMapping("/create-drink")
     public ResponseEntity<?> createDrink(@RequestBody DrinkDTO drinkDTO) {
         drinkService.saveDrinks(List.of(drinkDTO));
+        return ResponseEntity.ok().build();
+    }
+
+
+    @PostMapping("/{drinkId}/register/{registerId}")
+    public ResponseEntity<?> assignDrinkToRegister(@PathVariable Long drinkId, @PathVariable Long registerId) {
+        drinkService.assignDrinkToRegister(drinkId, registerId);
         return ResponseEntity.ok().build();
     }
 }

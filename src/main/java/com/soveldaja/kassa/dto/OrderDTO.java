@@ -15,5 +15,4 @@ public class OrderDTO {
     private String id;
     private List<OrderItemDTO> items;
     private BigDecimal total;
-    private LocalDateTime createdAt;
 }
