@@ -4,7 +4,6 @@ import com.soveldaja.kassa.dto.DrinkDTO;
 import com.soveldaja.kassa.entity.Register;
 import com.soveldaja.kassa.repository.DrinkRepository;
 import com.soveldaja.kassa.repository.RegisterRepository;
-import com.soveldaja.kassa.repository.UserRepository;
 import com.soveldaja.kassa.service.DrinkService;
 import com.soveldaja.kassa.service.RegisterService;
 import lombok.RequiredArgsConstructor;
@@ -18,7 +17,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class DatabaseSeeder implements CommandLineRunner {
 
-    private final UserRepository userRepository;
     private final DrinkService drinkService;
     private final RegisterService registerService;
     private final DrinkRepository drinkRepository;

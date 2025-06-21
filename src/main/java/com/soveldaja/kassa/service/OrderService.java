@@ -55,7 +55,7 @@ public class OrderService {
         for (OrderItemDTO itemDTO : orderDTO.getItems()) {
             OrderItem item = new OrderItem();
             item.setOrder(savedOrder);
-            item.setProductId(itemDTO.getProductId());
+            item.setDrinkId(itemDTO.getDrinkId());
             item.setQuantity(itemDTO.getQuantity());
             orderItems.add(item);
         }
@@ -95,7 +95,7 @@ public class OrderService {
 
         List<OrderItemDTO> itemDTOs = order.getItems().stream()
                 .map(item -> new OrderItemDTO(
-                        item.getProductId() != null ? item.getProductId() : null,
+                        item.getDrinkId() != null ? item.getDrinkId() : null,
                         item.getQuantity()))
                 .toList();
         dto.setItems(itemDTOs);

@@ -26,7 +26,7 @@ public class OrderItem {
     @JoinColumn(name = "order_id")
     private Order order;
 
-    private String productId;
+    private String drinkId;
 
     private Integer quantity;
 }
