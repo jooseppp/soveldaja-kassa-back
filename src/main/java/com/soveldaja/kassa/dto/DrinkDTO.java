@@ -11,7 +11,7 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 @AllArgsConstructor
 public class DrinkDTO {
-    private Long drinkId;
+    private Long id;
     private String name;
     private BigDecimal price;
     private Long registerId;

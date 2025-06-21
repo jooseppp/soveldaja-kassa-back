@@ -28,7 +28,7 @@ public class Drink extends AuditableEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long drinkId;
+    private Long id;
 
     private String name;
 
