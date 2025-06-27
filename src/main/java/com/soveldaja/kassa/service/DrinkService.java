@@ -46,6 +46,7 @@ public class DrinkService {
                     Drink drink = Drink.builder()
                             .name(drinkDto.getName())
                             .price(drinkDto.getPrice())
+                            .isShot(drinkDto.isShot())
                             .build();
 
                     if (drinkDto.getRegisterId() != null) {

@@ -14,11 +14,12 @@ public class DrinkDTO {
     private Long id;
     private String name;
     private BigDecimal price;
+    private boolean isShot;
     private Long registerId;
 
 
     public static DrinkDTO toDto(Drink drink) {
         Long registerId = drink.getRegister() != null ? drink.getRegister().getId() : null;
-        return new DrinkDTO(drink.getId(), drink.getName(), drink.getPrice(), registerId);
+        return new DrinkDTO(drink.getId(), drink.getName(), drink.getPrice(), drink.isShot(), registerId);
     }
 }

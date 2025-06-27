@@ -2,8 +2,6 @@ package com.soveldaja.kassa.config;
 
 import com.soveldaja.kassa.dto.DrinkDTO;
 import com.soveldaja.kassa.entity.Register;
-import com.soveldaja.kassa.repository.DrinkRepository;
-import com.soveldaja.kassa.repository.RegisterRepository;
 import com.soveldaja.kassa.service.DrinkService;
 import com.soveldaja.kassa.service.RegisterService;
 import lombok.RequiredArgsConstructor;
@@ -19,8 +17,6 @@ public class DatabaseSeeder implements CommandLineRunner {
 
     private final DrinkService drinkService;
     private final RegisterService registerService;
-    private final DrinkRepository drinkRepository;
-    private final RegisterRepository registerRepository;
 
 
     @Override
@@ -56,7 +52,7 @@ public class DatabaseSeeder implements CommandLineRunner {
 
         DrinkDTO longeroDto = new DrinkDTO();
         longeroDto.setName("Longero");
-        longeroDto.setPrice(BigDecimal.valueOf(10));
+        longeroDto.setPrice(BigDecimal.valueOf(6));
         longeroDto.setRegisterId(1L);
 
         drinkService.saveDrinks(List.of(beerDto, ciderDto, longeroDto, kaliDto));
@@ -84,7 +80,7 @@ public class DatabaseSeeder implements CommandLineRunner {
         greibiDto.setRegisterId(2L);
 
         DrinkDTO rummDto = new DrinkDTO();
-        rummDto.setName("Rumm Cola");
+        rummDto.setName("Rumm koola");
         rummDto.setPrice(BigDecimal.valueOf(9));
         rummDto.setRegisterId(2L);
 
@@ -117,22 +113,25 @@ public class DatabaseSeeder implements CommandLineRunner {
         DrinkDTO shotDto = new DrinkDTO();
         shotDto.setName("Shanky's whip");
         shotDto.setPrice(BigDecimal.valueOf(4));
-        shotDto.setRegisterId(3L);
+        shotDto.setRegisterId(2L);
+        shotDto.setShot(true);
 
         DrinkDTO vodkaDto = new DrinkDTO();
-        vodkaDto.setName("Vodka");
+        vodkaDto.setName("Viin");
         vodkaDto.setPrice(BigDecimal.valueOf(4));
-        vodkaDto.setRegisterId(3L);
+        vodkaDto.setRegisterId(2L);
+        vodkaDto.setShot(true);
 
         DrinkDTO tequilaDto = new DrinkDTO();
-        tequilaDto.setName("Tequila");
+        tequilaDto.setName("Tekiila");
         tequilaDto.setPrice(BigDecimal.valueOf(4));
-        tequilaDto.setRegisterId(3L);
+        tequilaDto.setRegisterId(2L);
+        tequilaDto.setShot(true);
 
         DrinkDTO limoncelloDto = new DrinkDTO();
         limoncelloDto.setName("Limoncello");
         limoncelloDto.setPrice(BigDecimal.valueOf(4));
-        limoncelloDto.setRegisterId(3L);
+        limoncelloDto.setRegisterId(2L);
 
         drinkService.saveDrinks(List.of(shotDto, vodkaDto, tequilaDto, limoncelloDto));
     }

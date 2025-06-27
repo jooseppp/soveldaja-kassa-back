@@ -34,6 +34,9 @@ public class Drink extends AuditableEntity {
 
     private BigDecimal price;
 
+    @Builder.Default
+    private boolean isShot = false;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "register_id")
     private Register register;
