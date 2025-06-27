@@ -68,4 +68,11 @@ public class OrderController {
                     .body(Map.of("error", "Order not found"));
         }
     }
+
+
+    @GetMapping("/register/{registerId}/last")
+    public ResponseEntity<List<OrderDTO>> getLastOrdersByRegisterId(@PathVariable String registerId) {
+        List<OrderDTO> orders = orderService.getLastOrdersByRegisterId(registerId, 5);
+        return ResponseEntity.ok(orders);
+    }
 }

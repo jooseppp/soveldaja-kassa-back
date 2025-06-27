@@ -7,6 +7,7 @@ import com.soveldaja.kassa.entity.OrderItem;
 import com.soveldaja.kassa.repository.OrderItemRepository;
 import com.soveldaja.kassa.repository.OrderRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -87,11 +88,20 @@ public class OrderService {
         orderRepository.deleteById(id);
     }
 
+    public List<OrderDTO> getLastOrdersByRegisterId(String registerId, int limit) {
+        return orderRepository.findByRegisterIdOrderByCreatedAtDesc(registerId, PageRequest.of(0, limit))
+                .stream()
+                .map(this::convertToDTO)
+                .collect(Collectors.toList());
+    }
+
 
     private OrderDTO convertToDTO(Order order) {
         OrderDTO dto = new OrderDTO();
         dto.setId(order.getId() != null ? order.getId().toString() : null);
         dto.setTotal(order.getTotal());
+        dto.setRegisterId(order.getRegisterId());
+        dto.setCreatedAt(order.getCreatedAt());
 
         List<OrderItemDTO> itemDTOs = order.getItems().stream()
                 .map(item -> new OrderItemDTO(

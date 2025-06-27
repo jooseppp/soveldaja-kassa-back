@@ -104,7 +104,6 @@ public class DatabaseSeeder implements CommandLineRunner {
         mojitoDto.setRegisterId(2L);
 
         drinkService.saveDrinks(List.of(gtDto, greibiDto, rummDto, aperativoDto, limoncelloDto, mojitoDto));
-
     }
 
 
@@ -134,6 +133,8 @@ public class DatabaseSeeder implements CommandLineRunner {
         limoncelloDto.setName("Limoncello");
         limoncelloDto.setPrice(BigDecimal.valueOf(4));
         limoncelloDto.setRegisterId(3L);
+
+        drinkService.saveDrinks(List.of(shotDto, vodkaDto, tequilaDto, limoncelloDto));
     }
 
 

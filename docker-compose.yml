@@ -1,4 +1,11 @@
 services:
+  frontend:
+    image: kassa-front
+    ports:
+      - "5173:80"
+    depends_on:
+      - app
+
   postgres:
     image: postgres:latest
     platform: linux/arm64
