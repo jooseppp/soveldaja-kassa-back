@@ -1,6 +1,6 @@
 services:
   frontend:
-    image: kassa-front
+    image: soveldaja-kassa-front:latest
     ports:
       - "5173:80"
     depends_on:
@@ -22,50 +22,50 @@ services:
     networks:
       - kassa-network
 
-  #  postgres-replica:
-  #    image: postgres:latest
-  #    platform: linux/arm64
-  #    container_name: kassa-postgres-replica
-  #    environment:
-  #      POSTGRES_USER: admin
-  #      POSTGRES_PASSWORD: admin
-  #      POSTGRES_DB: kassa
-  #      PGPASSWORD: admin
-  #    command: >
-  #      bash -c "
-  #        # Wait for primary to be ready
-  #        until PGPASSWORD=admin psql -h postgres -U admin -d kassa -c 'SELECT 1' > /dev/null 2>&1; do
-  #          echo 'Waiting for primary database to be ready...'
-  #          sleep 5
-  #        done
-  #
-  #        # Stop postgres if running
-  #        su postgres -c 'pg_ctl -D /var/lib/postgresql/data stop -m fast' || true
-  #
-  #        # Remove existing data directory if exists
-  #        rm -rf /var/lib/postgresql/data/*
-  #        chown postgres:postgres /var/lib/postgresql/data
-  #
-  #        # Initialize replica from primary
-  #        su postgres -c 'PGPASSWORD=admin pg_basebackup -h postgres -U admin -D /var/lib/postgresql/data -P -X stream'
-  #
-  #        # Configure as replica
-  #        su postgres -c 'echo \"primary_conninfo = '\''host=postgres port=5432 user=admin password=admin application_name=replica1'\''\" > /var/lib/postgresql/data/postgresql.conf'
-  #        su postgres -c 'echo \"standby_mode = on\" >> /var/lib/postgresql/data/postgresql.conf'
-  #        su postgres -c 'touch /var/lib/postgresql/data/standby.signal'
-  #
-  #        # Start postgres as postgres user
-  #        su postgres -c 'postgres'
-  #      "
-  #    ports:
-  #      - "5433:5432"
-  #    volumes:
-  #      - postgres-replica-data:/var/lib/postgresql/data
-  #    depends_on:
-  #      - postgres
-  #    restart: unless-stopped
-  #    networks:
-  #      - kassa-network
+  postgres-replica:
+    image: postgres:latest
+    platform: linux/arm64
+    container_name: kassa-postgres-replica
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin
+      POSTGRES_DB: kassa
+      PGPASSWORD: admin
+    command: >
+      bash -c "
+        # Wait for primary to be ready
+        until PGPASSWORD=admin psql -h postgres -U admin -d kassa -c 'SELECT 1' > /dev/null 2>&1; do
+          echo 'Waiting for primary database to be ready...'
+          sleep 5
+        done
+      
+        # Stop postgres if running
+        su postgres -c 'pg_ctl -D /var/lib/postgresql/data stop -m fast' || true
+      
+        # Remove existing data directory if exists
+        rm -rf /var/lib/postgresql/data/*
+        chown postgres:postgres /var/lib/postgresql/data
+      
+        # Initialize replica from primary
+        su postgres -c 'PGPASSWORD=admin pg_basebackup -h postgres -U admin -D /var/lib/postgresql/data -P -X stream'
+      
+        # Configure as replica
+        su postgres -c 'echo \"primary_conninfo = '\''host=postgres port=5432 user=admin password=admin application_name=replica1'\''\" > /var/lib/postgresql/data/postgresql.conf'
+        su postgres -c 'echo \"standby_mode = on\" >> /var/lib/postgresql/data/postgresql.conf'
+        su postgres -c 'touch /var/lib/postgresql/data/standby.signal'
+      
+        # Start postgres as postgres user
+        su postgres -c 'postgres'
+      "
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres-replica-data:/var/lib/postgresql/data
+    depends_on:
+      - postgres
+    restart: unless-stopped
+    networks:
+      - kassa-network
 
   app:
     build:
@@ -75,7 +75,7 @@ services:
     platform: linux/arm64
     depends_on:
       - postgres
-#      - postgres-replica
+      - postgres-replica
     environment:
       # Primary database connection
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/kassa
@@ -143,7 +143,5 @@ networks:
 volumes:
   postgres-data:
     driver: local
-# postgres-replica-data:
-#   driver: local
-# postgres-backups:
-#   driver: local
+  postgres-replica-data:
+    driver: local

@@ -71,7 +71,7 @@ public class OrderController {
 
 
     @GetMapping("/register/{registerId}/last")
-    public ResponseEntity<List<OrderDTO>> getLastOrdersByRegisterId(@PathVariable String registerId) {
+    public ResponseEntity<List<OrderDTO>> getLastOrdersByRegisterId(@PathVariable Integer registerId) {
         List<OrderDTO> orders = orderService.getLastOrdersByRegisterId(registerId, 5);
         return ResponseEntity.ok(orders);
     }

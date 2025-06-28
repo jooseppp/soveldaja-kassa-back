@@ -16,5 +16,5 @@ public class OrderDTO {
     private List<OrderItemDTO> items;
     private BigDecimal total;
     private LocalDateTime createdAt;
-    private String registerId;
+    private Integer registerId;
 }

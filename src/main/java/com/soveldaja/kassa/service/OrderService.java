@@ -11,8 +11,10 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
@@ -24,7 +26,12 @@ public class OrderService {
 
 
     public List<OrderDTO> getAllOrders(String status, String customerId) {
+        // Validate parameters if they are used in the future
         List<Order> orders = orderRepository.findAll();
+
+        if (orders.isEmpty()) {
+            return new ArrayList<>();
+        }
 
         return orders.stream()
                 .map(this::convertToDTO)
@@ -41,8 +48,13 @@ public class OrderService {
 
     @Transactional
     public OrderDTO createOrder(OrderDTO orderDTO) {
+        if (orderDTO == null) {
+            throw new IllegalArgumentException("OrderDTO cannot be null");
+        }
+
         Order order = new Order();
-        order.setTotal(orderDTO.getTotal());
+        order.setTotal(orderDTO.getTotal() != null ? orderDTO.getTotal() : BigDecimal.ZERO);
+        order.setRegisterId(orderDTO.getRegisterId());
 
         Order savedOrder = orderRepository.save(order);
         createOrderItems(orderDTO, savedOrder);
@@ -52,12 +64,26 @@ public class OrderService {
 
 
     private void createOrderItems(OrderDTO orderDTO, Order savedOrder) {
+        if (savedOrder == null) {
+            throw new IllegalArgumentException("Order cannot be null");
+        }
+
         List<OrderItem> orderItems = new ArrayList<>();
+
+        if (orderDTO == null || orderDTO.getItems() == null || orderDTO.getItems().isEmpty()) {
+            savedOrder.setItems(orderItems);
+            return;
+        }
+
         for (OrderItemDTO itemDTO : orderDTO.getItems()) {
+            if (itemDTO == null) {
+                continue;
+            }
+
             OrderItem item = new OrderItem();
             item.setOrder(savedOrder);
             item.setDrinkId(itemDTO.getDrinkId());
-            item.setQuantity(itemDTO.getQuantity());
+            item.setQuantity(itemDTO.getQuantity() != null ? itemDTO.getQuantity() : 0);
             orderItems.add(item);
         }
 
@@ -68,13 +94,31 @@ public class OrderService {
 
     @Transactional
     public OrderDTO updateOrder(Long id, OrderDTO orderDTO) {
+        if (id == null) {
+            throw new IllegalArgumentException("Order ID cannot be null");
+        }
+
+        if (orderDTO == null) {
+            throw new IllegalArgumentException("OrderDTO cannot be null");
+        }
+
         Order order = orderRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Order not found with id: " + id));
 
+        // Update order properties
+        if (orderDTO.getTotal() != null) {
+            order.setTotal(orderDTO.getTotal());
+        }
+
+        if (orderDTO.getRegisterId() != null) {
+            order.setRegisterId(orderDTO.getRegisterId());
+        }
 
         // Remove existing items
-        orderItemRepository.deleteAll(order.getItems());
-        order.getItems().clear();
+        if (order.getItems() != null) {
+            orderItemRepository.deleteAll(order.getItems());
+            order.getItems().clear();
+        }
 
         // Add new items
         createOrderItems(orderDTO, order);
@@ -85,29 +129,56 @@ public class OrderService {
 
 
     public void deleteOrder(Long id) {
+        if (id == null) {
+            throw new IllegalArgumentException("Order ID cannot be null");
+        }
+
+        // Check if order exists before deleting
+        if (!orderRepository.existsById(id)) {
+            throw new RuntimeException("Order not found with id: " + id);
+        }
+
         orderRepository.deleteById(id);
     }
 
-    public List<OrderDTO> getLastOrdersByRegisterId(String registerId, int limit) {
-        return orderRepository.findByRegisterIdOrderByCreatedAtDesc(registerId, PageRequest.of(0, limit))
-                .stream()
+
+    public List<OrderDTO> getLastOrdersByRegisterId(Integer registerId, int limit) {
+        if (registerId == null) {
+            throw new IllegalArgumentException("Register ID cannot be null or empty");
+        }
+
+        List<Order> orders = orderRepository.findByRegisterIdOrderByCreatedAtDesc(registerId, PageRequest.of(0, limit));
+
+        if (orders.isEmpty()) {
+            return new ArrayList<>();
+        }
+
+        return orders.stream()
                 .map(this::convertToDTO)
                 .collect(Collectors.toList());
     }
 
 
     private OrderDTO convertToDTO(Order order) {
+        if (order == null) {
+            return null;
+        }
+
         OrderDTO dto = new OrderDTO();
         dto.setId(order.getId() != null ? order.getId().toString() : null);
         dto.setTotal(order.getTotal());
         dto.setRegisterId(order.getRegisterId());
         dto.setCreatedAt(order.getCreatedAt());
 
-        List<OrderItemDTO> itemDTOs = order.getItems().stream()
-                .map(item -> new OrderItemDTO(
-                        item.getDrinkId() != null ? item.getDrinkId() : null,
-                        item.getQuantity()))
-                .toList();
+        List<OrderItemDTO> itemDTOs = new ArrayList<>();
+        if (order.getItems() != null) {
+            itemDTOs = order.getItems().stream()
+                    .filter(Objects::nonNull)
+                    .map(item -> new OrderItemDTO(
+                            item.getDrinkId() != null ? item.getDrinkId() : null,
+                            item.getQuantity() != null ? item.getQuantity() : 0))
+                    .toList();
+        }
         dto.setItems(itemDTOs);
         return dto;
     }
