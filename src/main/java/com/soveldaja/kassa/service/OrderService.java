@@ -1,5 +1,6 @@
 package com.soveldaja.kassa.service;
 
+import com.soveldaja.kassa.dto.DrinkDTO;
 import com.soveldaja.kassa.dto.OrderDTO;
 import com.soveldaja.kassa.dto.OrderItemDTO;
 import com.soveldaja.kassa.entity.Order;
@@ -23,6 +24,7 @@ public class OrderService {
 
     private final OrderRepository orderRepository;
     private final OrderItemRepository orderItemRepository;
+    private final DrinkService drinkService;
 
 
     public List<OrderDTO> getAllOrders(String status, String customerId) {
@@ -174,9 +176,25 @@ public class OrderService {
         if (order.getItems() != null) {
             itemDTOs = order.getItems().stream()
                     .filter(Objects::nonNull)
-                    .map(item -> new OrderItemDTO(
-                            item.getDrinkId() != null ? item.getDrinkId() : null,
-                            item.getQuantity() != null ? item.getQuantity() : 0))
+                    .map(item -> {
+                        String drinkId = item.getDrinkId() != null ? item.getDrinkId() : null;
+                        Integer quantity = item.getQuantity() != null ? item.getQuantity() : 0;
+
+                        OrderItemDTO orderItemDTO = new OrderItemDTO(drinkId, null, quantity);
+
+                        // Try to get the drink name if drinkId is not null
+                        if (drinkId != null) {
+                            try {
+                                Long drinkIdLong = Long.parseLong(drinkId);
+                                DrinkDTO drinkDTO = drinkService.getDrinkById(drinkIdLong);
+                                orderItemDTO.setDrinkName(drinkDTO.getName());
+                            } catch (Exception e) {
+                                // If there's any error (parsing, drink not found, etc.), leave drinkName as null
+                            }
+                        }
+
+                        return orderItemDTO;
+                    })
                     .toList();
         }
         dto.setItems(itemDTOs);
