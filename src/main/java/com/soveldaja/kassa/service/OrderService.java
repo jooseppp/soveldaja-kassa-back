@@ -55,12 +55,18 @@ public class OrderService {
         }
 
         Order order = new Order();
-        order.setTotal(orderDTO.getTotal() != null ? orderDTO.getTotal() : BigDecimal.ZERO);
         order.setRegisterId(orderDTO.getRegisterId());
+        order.setItems(new ArrayList<>()); // Initialize items collection
 
         Order savedOrder = orderRepository.save(order);
         createOrderItems(orderDTO, savedOrder);
 
+        // Calculate total based on drink prices from database
+        BigDecimal total = calculateOrderTotal(savedOrder);
+        savedOrder.setTotal(total);
+
+        // Save again to ensure all changes are persisted
+        savedOrder = orderRepository.save(savedOrder);
         return convertToDTO(savedOrder);
     }
 
@@ -70,13 +76,17 @@ public class OrderService {
             throw new IllegalArgumentException("Order cannot be null");
         }
 
-        List<OrderItem> orderItems = new ArrayList<>();
+        // Ensure items collection is initialized
+        if (savedOrder.getItems() == null) {
+            savedOrder.setItems(new ArrayList<>());
+        }
 
+        // If no items in DTO, just return (items were already cleared in updateOrder)
         if (orderDTO == null || orderDTO.getItems() == null || orderDTO.getItems().isEmpty()) {
-            savedOrder.setItems(orderItems);
             return;
         }
 
+        List<OrderItem> newItems = new ArrayList<>();
         for (OrderItemDTO itemDTO : orderDTO.getItems()) {
             if (itemDTO == null) {
                 continue;
@@ -86,11 +96,14 @@ public class OrderService {
             item.setOrder(savedOrder);
             item.setDrinkId(itemDTO.getDrinkId());
             item.setQuantity(itemDTO.getQuantity() != null ? itemDTO.getQuantity() : 0);
-            orderItems.add(item);
+            newItems.add(item);
         }
 
-        orderItemRepository.saveAll(orderItems);
-        savedOrder.setItems(orderItems);
+        // Save all new items
+        orderItemRepository.saveAll(newItems);
+
+        // Add all new items to the order's collection
+        savedOrder.getItems().addAll(newItems);
     }
 
 
@@ -107,25 +120,29 @@ public class OrderService {
         Order order = orderRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Order not found with id: " + id));
 
-        // Update order properties
-        if (orderDTO.getTotal() != null) {
-            order.setTotal(orderDTO.getTotal());
-        }
-
+        // Update registerId if provided
         if (orderDTO.getRegisterId() != null) {
             order.setRegisterId(orderDTO.getRegisterId());
         }
 
-        // Remove existing items
-        if (order.getItems() != null) {
-            orderItemRepository.deleteAll(order.getItems());
-            order.getItems().clear();
+        // Update items - first save the order to ensure it exists in the database
+        Order savedOrder = orderRepository.save(order);
+
+        // Then clear and update items
+        if (savedOrder.getItems() != null) {
+            savedOrder.getItems().clear();
+            orderRepository.save(savedOrder); // Save after clearing to ensure changes are persisted
         }
 
         // Add new items
-        createOrderItems(orderDTO, order);
+        createOrderItems(orderDTO, savedOrder);
 
-        Order updatedOrder = orderRepository.save(order);
+        // Calculate total based on drink prices from database
+        BigDecimal total = calculateOrderTotal(savedOrder);
+        savedOrder.setTotal(total);
+
+        // Final save and return
+        Order updatedOrder = orderRepository.save(savedOrder);
         return convertToDTO(updatedOrder);
     }
 
@@ -158,6 +175,38 @@ public class OrderService {
         return orders.stream()
                 .map(this::convertToDTO)
                 .collect(Collectors.toList());
+    }
+
+
+    /**
+     * Calculates the total price of an order based on the prices of drinks in the database.
+     *
+     * @param order The order to calculate the total for
+     * @return The total price of the order
+     */
+    private BigDecimal calculateOrderTotal(Order order) {
+        if (order == null || order.getItems() == null || order.getItems().isEmpty()) {
+            return BigDecimal.ZERO;
+        }
+
+        return order.getItems().stream()
+                .filter(Objects::nonNull)
+                .map(item -> {
+                    if (item.getDrinkId() == null || item.getQuantity() == null) {
+                        return BigDecimal.ZERO;
+                    }
+
+                    try {
+                        Long drinkId = Long.parseLong(item.getDrinkId());
+                        DrinkDTO drink = drinkService.getDrinkById(drinkId);
+                        BigDecimal price = drink.getPrice() != null ? drink.getPrice() : BigDecimal.ZERO;
+                        return price.multiply(BigDecimal.valueOf(item.getQuantity()));
+                    } catch (Exception e) {
+                        // If there's any error (parsing, drink not found, etc.), return zero
+                        return BigDecimal.ZERO;
+                    }
+                })
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 
 

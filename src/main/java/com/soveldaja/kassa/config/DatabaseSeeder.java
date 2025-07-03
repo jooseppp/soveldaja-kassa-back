@@ -25,6 +25,7 @@ public class DatabaseSeeder implements CommandLineRunner {
         createBeers();
         createCoctails();
         createShots();
+        createPandiButtons();
     }
 
 
@@ -150,5 +151,28 @@ public class DatabaseSeeder implements CommandLineRunner {
         registerService.saveRegister(register1);
         registerService.saveRegister(register2);
         registerService.saveRegister(register3);
+    }
+
+
+    private void createPandiButtons() {
+        List<Register> registers = registerService.getAllRegisters();
+        List<DrinkDTO> pandiButtons = new java.util.ArrayList<>();
+
+        for (Register register : registers) {
+            DrinkDTO panditopsDto = new DrinkDTO();
+            panditopsDto.setName("Panditops");
+            panditopsDto.setPrice(BigDecimal.valueOf(2));
+            panditopsDto.setRegisterId(register.getId());
+
+            DrinkDTO pandipokaalDto = new DrinkDTO();
+            pandipokaalDto.setName("Pandipokaal");
+            pandipokaalDto.setPrice(BigDecimal.valueOf(4));
+            pandipokaalDto.setRegisterId(register.getId());
+
+            pandiButtons.add(panditopsDto);
+            pandiButtons.add(pandipokaalDto);
+        }
+
+        drinkService.saveDrinks(pandiButtons);
     }
 }
