@@ -100,9 +100,9 @@ public class DatabaseSeeder implements CommandLineRunner {
         longeroDto9.setRegisterId(9L);
 
         drinkService.saveDrinks(List.of(
-            beerDto7, ciderDto7, kaliDto7, longeroDto7,
-            beerDto8, ciderDto8, kaliDto8, longeroDto8,
-            beerDto9, ciderDto9, kaliDto9, longeroDto9
+                beerDto7, ciderDto7, kaliDto7, longeroDto7,
+                beerDto8, ciderDto8, kaliDto8, longeroDto8,
+                beerDto9, ciderDto9, kaliDto9, longeroDto9
         ));
     }
 
@@ -275,9 +275,9 @@ public class DatabaseSeeder implements CommandLineRunner {
         colaDto3.setRegisterId(3L);
 
         drinkService.saveDrinks(List.of(
-            aperativoDto1, limoncelloSpritzDto1, gtDto1, greibiDto1, cubaLibreDto1, mojitoDto1, cavaDto1, greibilimpsDto1, vesiDto1, colaDto1,
-            aperativoDto2, limoncelloSpritzDto2, gtDto2, greibiDto2, cubaLibreDto2, mojitoDto2, cavaDto2, greibilimpsDto2, vesiDto2, colaDto2,
-            aperativoDto3, limoncelloSpritzDto3, gtDto3, greibiDto3, cubaLibreDto3, mojitoDto3, cavaDto3, greibilimpsDto3, vesiDto3, colaDto3
+                aperativoDto1, limoncelloSpritzDto1, gtDto1, greibiDto1, cubaLibreDto1, mojitoDto1, cavaDto1, greibilimpsDto1, vesiDto1, colaDto1,
+                aperativoDto2, limoncelloSpritzDto2, gtDto2, greibiDto2, cubaLibreDto2, mojitoDto2, cavaDto2, greibilimpsDto2, vesiDto2, colaDto2,
+                aperativoDto3, limoncelloSpritzDto3, gtDto3, greibiDto3, cubaLibreDto3, mojitoDto3, cavaDto3, greibilimpsDto3, vesiDto3, colaDto3
         ));
     }
 
@@ -440,12 +440,12 @@ public class DatabaseSeeder implements CommandLineRunner {
         limoncelloDto6.setShot(true);
 
         drinkService.saveDrinks(List.of(
-            shankysDto1, vodkaDto1, tequilaDto1, limoncelloDto1,
-            shankysDto2, vodkaDto2, tequilaDto2, limoncelloDto2,
-            shankysDto3, vodkaDto3, tequilaDto3, limoncelloDto3,
-            shankysDto4, vodkaDto4, tequilaDto4, limoncelloDto4,
-            shankysDto5, vodkaDto5, tequilaDto5, limoncelloDto5,
-            shankysDto6, vodkaDto6, tequilaDto6, limoncelloDto6
+                shankysDto1, vodkaDto1, tequilaDto1, limoncelloDto1,
+                shankysDto2, vodkaDto2, tequilaDto2, limoncelloDto2,
+                shankysDto3, vodkaDto3, tequilaDto3, limoncelloDto3,
+                shankysDto4, vodkaDto4, tequilaDto4, limoncelloDto4,
+                shankysDto5, vodkaDto5, tequilaDto5, limoncelloDto5,
+                shankysDto6, vodkaDto6, tequilaDto6, limoncelloDto6
         ));
     }
 
