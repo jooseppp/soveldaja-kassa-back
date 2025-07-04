@@ -56,14 +56,25 @@ public class OrderService {
 
         Order order = new Order();
         order.setRegisterId(orderDTO.getRegisterId());
-        order.setItems(new ArrayList<>()); // Initialize items collection
+        order.setItems(new ArrayList<>());
+
+        if (orderDTO.isZeroOrder()) {
+            order.setTotal(BigDecimal.valueOf(0));
+        } else {
+            order.setTotal(orderDTO.getTotal() != null ? orderDTO.getTotal() : BigDecimal.ZERO);
+        }
 
         Order savedOrder = orderRepository.save(order);
         createOrderItems(orderDTO, savedOrder);
 
-        // Calculate total based on drink prices from database
-        BigDecimal total = calculateOrderTotal(savedOrder);
-        savedOrder.setTotal(total);
+        /* Calculate total based on drink prices from database
+        BigDecimal total;
+        if (orderDTO.isZeroOrder()) {
+            total = BigDecimal.valueOf(0);
+        } else {
+            total = calculateOrderTotal(savedOrder);
+        }
+        savedOrder.setTotal(total);*/
 
         // Save again to ensure all changes are persisted
         savedOrder = orderRepository.save(savedOrder);

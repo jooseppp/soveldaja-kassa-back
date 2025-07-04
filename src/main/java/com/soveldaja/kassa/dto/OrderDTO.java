@@ -17,4 +17,5 @@ public class OrderDTO {
     private BigDecimal total;
     private LocalDateTime createdAt;
     private Integer registerId;
+    private boolean isZeroOrder;
 }
