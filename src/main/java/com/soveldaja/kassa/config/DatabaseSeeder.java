@@ -274,10 +274,166 @@ public class DatabaseSeeder implements CommandLineRunner {
         colaDto3.setPrice(BigDecimal.valueOf(3));
         colaDto3.setRegisterId(3L);
 
+        // Create cocktails for register 4
+        DrinkDTO aperativoDto4 = new DrinkDTO();
+        aperativoDto4.setName("Aperativo Spritz");
+        aperativoDto4.setPrice(BigDecimal.valueOf(9));
+        aperativoDto4.setRegisterId(4L);
+
+        DrinkDTO limoncelloSpritzDto4 = new DrinkDTO();
+        limoncelloSpritzDto4.setName("Limoncello Spritz");
+        limoncelloSpritzDto4.setPrice(BigDecimal.valueOf(9));
+        limoncelloSpritzDto4.setRegisterId(4L);
+
+        DrinkDTO gtDto4 = new DrinkDTO();
+        gtDto4.setName("GT");
+        gtDto4.setPrice(BigDecimal.valueOf(9));
+        gtDto4.setRegisterId(4L);
+
+        DrinkDTO greibiDto4 = new DrinkDTO();
+        greibiDto4.setName("Greibi Collins");
+        greibiDto4.setPrice(BigDecimal.valueOf(9));
+        greibiDto4.setRegisterId(4L);
+
+        DrinkDTO cubaLibreDto4 = new DrinkDTO();
+        cubaLibreDto4.setName("Cuba libre");
+        cubaLibreDto4.setPrice(BigDecimal.valueOf(9));
+        cubaLibreDto4.setRegisterId(4L);
+
+        DrinkDTO mojitoDto4 = new DrinkDTO();
+        mojitoDto4.setName("Mojito");
+        mojitoDto4.setPrice(BigDecimal.valueOf(9));
+        mojitoDto4.setRegisterId(4L);
+
+        DrinkDTO cavaDto4 = new DrinkDTO();
+        cavaDto4.setName("Cava");
+        cavaDto4.setPrice(BigDecimal.valueOf(7));
+        cavaDto4.setRegisterId(4L);
+
+        DrinkDTO greibilimpsDto4 = new DrinkDTO();
+        greibilimpsDto4.setName("Greibilimps");
+        greibilimpsDto4.setPrice(BigDecimal.valueOf(4));
+        greibilimpsDto4.setRegisterId(4L);
+
+        DrinkDTO vesiDto4 = new DrinkDTO();
+        vesiDto4.setName("Vesi mullita/mulliga");
+        vesiDto4.setPrice(BigDecimal.valueOf(2));
+        vesiDto4.setRegisterId(4L);
+
+        DrinkDTO colaDto4 = new DrinkDTO();
+        colaDto4.setName("Coca-cola");
+        colaDto4.setPrice(BigDecimal.valueOf(3));
+        colaDto4.setRegisterId(4L);
+
+        // Create cocktails for register 5
+        DrinkDTO aperativoDto5 = new DrinkDTO();
+        aperativoDto5.setName("Aperativo Spritz");
+        aperativoDto5.setPrice(BigDecimal.valueOf(9));
+        aperativoDto5.setRegisterId(5L);
+
+        DrinkDTO limoncelloSpritzDto5 = new DrinkDTO();
+        limoncelloSpritzDto5.setName("Limoncello Spritz");
+        limoncelloSpritzDto5.setPrice(BigDecimal.valueOf(9));
+        limoncelloSpritzDto5.setRegisterId(5L);
+
+        DrinkDTO gtDto5 = new DrinkDTO();
+        gtDto5.setName("GT");
+        gtDto5.setPrice(BigDecimal.valueOf(9));
+        gtDto5.setRegisterId(5L);
+
+        DrinkDTO greibiDto5 = new DrinkDTO();
+        greibiDto5.setName("Greibi Collins");
+        greibiDto5.setPrice(BigDecimal.valueOf(9));
+        greibiDto5.setRegisterId(5L);
+
+        DrinkDTO cubaLibreDto5 = new DrinkDTO();
+        cubaLibreDto5.setName("Cuba libre");
+        cubaLibreDto5.setPrice(BigDecimal.valueOf(9));
+        cubaLibreDto5.setRegisterId(5L);
+
+        DrinkDTO mojitoDto5 = new DrinkDTO();
+        mojitoDto5.setName("Mojito");
+        mojitoDto5.setPrice(BigDecimal.valueOf(9));
+        mojitoDto5.setRegisterId(5L);
+
+        DrinkDTO cavaDto5 = new DrinkDTO();
+        cavaDto5.setName("Cava");
+        cavaDto5.setPrice(BigDecimal.valueOf(7));
+        cavaDto5.setRegisterId(5L);
+
+        DrinkDTO greibilimpsDto5 = new DrinkDTO();
+        greibilimpsDto5.setName("Greibilimps");
+        greibilimpsDto5.setPrice(BigDecimal.valueOf(4));
+        greibilimpsDto5.setRegisterId(5L);
+
+        DrinkDTO vesiDto5 = new DrinkDTO();
+        vesiDto5.setName("Vesi mullita/mulliga");
+        vesiDto5.setPrice(BigDecimal.valueOf(2));
+        vesiDto5.setRegisterId(5L);
+
+        DrinkDTO colaDto5 = new DrinkDTO();
+        colaDto5.setName("Coca-cola");
+        colaDto5.setPrice(BigDecimal.valueOf(3));
+        colaDto5.setRegisterId(5L);
+
+        // Create cocktails for register 6
+        DrinkDTO aperativoDto6 = new DrinkDTO();
+        aperativoDto6.setName("Aperativo Spritz");
+        aperativoDto6.setPrice(BigDecimal.valueOf(9));
+        aperativoDto6.setRegisterId(6L);
+
+        DrinkDTO limoncelloSpritzDto6 = new DrinkDTO();
+        limoncelloSpritzDto6.setName("Limoncello Spritz");
+        limoncelloSpritzDto6.setPrice(BigDecimal.valueOf(9));
+        limoncelloSpritzDto6.setRegisterId(6L);
+
+        DrinkDTO gtDto6 = new DrinkDTO();
+        gtDto6.setName("GT");
+        gtDto6.setPrice(BigDecimal.valueOf(9));
+        gtDto6.setRegisterId(6L);
+
+        DrinkDTO greibiDto6 = new DrinkDTO();
+        greibiDto6.setName("Greibi Collins");
+        greibiDto6.setPrice(BigDecimal.valueOf(9));
+        greibiDto6.setRegisterId(6L);
+
+        DrinkDTO cubaLibreDto6 = new DrinkDTO();
+        cubaLibreDto6.setName("Cuba libre");
+        cubaLibreDto6.setPrice(BigDecimal.valueOf(9));
+        cubaLibreDto6.setRegisterId(6L);
+
+        DrinkDTO mojitoDto6 = new DrinkDTO();
+        mojitoDto6.setName("Mojito");
+        mojitoDto6.setPrice(BigDecimal.valueOf(9));
+        mojitoDto6.setRegisterId(6L);
+
+        DrinkDTO cavaDto6 = new DrinkDTO();
+        cavaDto6.setName("Cava");
+        cavaDto6.setPrice(BigDecimal.valueOf(7));
+        cavaDto6.setRegisterId(6L);
+
+        DrinkDTO greibilimpsDto6 = new DrinkDTO();
+        greibilimpsDto6.setName("Greibilimps");
+        greibilimpsDto6.setPrice(BigDecimal.valueOf(4));
+        greibilimpsDto6.setRegisterId(6L);
+
+        DrinkDTO vesiDto6 = new DrinkDTO();
+        vesiDto6.setName("Vesi mullita/mulliga");
+        vesiDto6.setPrice(BigDecimal.valueOf(2));
+        vesiDto6.setRegisterId(6L);
+
+        DrinkDTO colaDto6 = new DrinkDTO();
+        colaDto6.setName("Coca-cola");
+        colaDto6.setPrice(BigDecimal.valueOf(3));
+        colaDto6.setRegisterId(6L);
+
         drinkService.saveDrinks(List.of(
                 aperativoDto1, limoncelloSpritzDto1, gtDto1, greibiDto1, cubaLibreDto1, mojitoDto1, cavaDto1, greibilimpsDto1, vesiDto1, colaDto1,
                 aperativoDto2, limoncelloSpritzDto2, gtDto2, greibiDto2, cubaLibreDto2, mojitoDto2, cavaDto2, greibilimpsDto2, vesiDto2, colaDto2,
-                aperativoDto3, limoncelloSpritzDto3, gtDto3, greibiDto3, cubaLibreDto3, mojitoDto3, cavaDto3, greibilimpsDto3, vesiDto3, colaDto3
+                aperativoDto3, limoncelloSpritzDto3, gtDto3, greibiDto3, cubaLibreDto3, mojitoDto3, cavaDto3, greibilimpsDto3, vesiDto3, colaDto3,
+                aperativoDto4, limoncelloSpritzDto4, gtDto4, greibiDto4, cubaLibreDto4, mojitoDto4, cavaDto4, greibilimpsDto4, vesiDto4, colaDto4,
+                aperativoDto5, limoncelloSpritzDto5, gtDto5, greibiDto5, cubaLibreDto5, mojitoDto5, cavaDto5, greibilimpsDto5, vesiDto5, colaDto5,
+                aperativoDto6, limoncelloSpritzDto6, gtDto6, greibiDto6, cubaLibreDto6, mojitoDto6, cavaDto6, greibilimpsDto6, vesiDto6, colaDto6
         ));
     }
 
